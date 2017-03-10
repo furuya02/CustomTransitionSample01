@@ -11,7 +11,7 @@ import UIKit
 class FirstViewController: UITableViewController {
     
     let photoMax = 35
-    let customTransition = CustomTransition()
+    let customTransition = CustomTransition.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()

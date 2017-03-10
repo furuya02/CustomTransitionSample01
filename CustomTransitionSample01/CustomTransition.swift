@@ -11,12 +11,7 @@ import UIKit
 
 class CustomTransition: NSObject, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning{
     
-    class var sharedInstance : CustomTransition {
-        struct Static {
-            static let instance : CustomTransition = CustomTransition()
-        }
-        return Static.instance
-    }
+    static let shared = CustomTransition()
     
     fileprivate var isPresent = false
     
