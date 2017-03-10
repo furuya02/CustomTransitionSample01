@@ -95,35 +95,35 @@ class CustomTransition: NSObject, UIViewControllerTransitioningDelegate, UIViewC
         let secondViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) as! SecondViewController
         let firstViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to) as! FirstViewController
         let containerView = transitionContext.containerView
-        
-        // 遷移元のイメージビューからアニメーション用のビューを作成
-        let animationView = secondViewController.photoView.snapshotView(afterScreenUpdates: false)
-        animationView?.frame = containerView.convert(secondViewController.photoView.frame, from: secondViewController.photoView.superview)
-        // 遷移元のイメージを非表示にする
-        secondViewController.photoView.isHidden = true
 
         // 遷移先のセルを取得
         let cell = firstViewController.tableView.cellForRow(at: secondViewController.indexPath) as! TableViewCell
         // 遷移先のセルのイメージを非表示
         cell.photoView.isHidden = true
         
+        // 遷移元のイメージビューからアニメーション用のビューを作成
+        let animationView = UIImageView(image: secondViewController.photoView.image)
+        animationView.frame = containerView.convert(secondViewController.photoView.frame, from: secondViewController.photoView.superview)
+        // 遷移元のイメージを非表示にする
+        secondViewController.photoView.isHidden = true
+        
         //遷移後のビューコントローラを、予め最後の位置まで移動完了させ非表示にする
         firstViewController.view.frame = transitionContext.finalFrame(for: firstViewController)
 
         // 遷移コンテナに、遷移後のビューと、アニメーション用のビューを追加する
         containerView.insertSubview(firstViewController.view, belowSubview: secondViewController.view)
-        containerView.addSubview(animationView!)
+        containerView.addSubview(animationView)
         
         
         UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
             // 遷移元のビューを徐々に非表示にする
             secondViewController.view.alpha = 0
             // アニメーションビューは、遷移後のイメージの位置まで、アニメーションする
-            animationView?.frame = containerView.convert(cell.photoView.frame, from: cell.photoView.superview)
+            animationView.frame = containerView.convert(cell.photoView.frame, from: cell.photoView.superview)
         }, completion: {
             finished in
             // アニメーション用のビューを削除する
-            animationView?.removeFromSuperview()
+            animationView.removeFromSuperview()
             // 遷移元のイメージの非表示を元に戻す
             secondViewController.photoView.isHidden = false
             // セルのイメージの非表示を元に戻す
